@@ -1,28 +1,36 @@
-var roleHarvester = {
-
-    /** @param {Creep} creep **/
-    run: function(creep) {
-        if(creep.carry.energy < creep.carryCapacity) {
-            var sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
-            }
+module.exports = {
+    run: function (creep) {
+        // no energy
+        if (creep.memory.working && creep.carry.energy == 0){
+            //switch state
+            creep.memory.working = false;
         }
-        else {
-            var targets = creep.room.find(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_EXTENSION ||
-                        structure.structureType == STRUCTURE_SPAWN ||
-                        structure.structureType == STRUCTURE_TOWER) && structure.energy < structure.energyCapacity;
-                }
+        //full
+        if (creep.memory.working== false && creep.carry.energy == creep.carryCapacity){
+            creep.memory.working = true;
+        }
+
+        // transfer energy to container or storage
+        if (creep.memory.working){
+            let structure = creep.pos.findClosestByPath(FIND_STRUCTURES,{
+                filter: s => (s.structureType == STRUCTURE_STORAGE ||
+                            s.structureType == STRUCTURE_CONTAINER
+                            ) && _.sum(s.store) < s.storeCapacity
+
             });
-            if(targets.length > 0) {
-                if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
-                }
+            // if not found
+            if (structure == undefined){
+                structure = creep.room.storage;
             }
+            // if found
+            if (structure != undefined){
+                if (creep.transfer(structure,RESOURCE_ENERGY) == ERR_NOT_IN_RANGE){
+                    creep.moveTo(structure);
+                }
+            } 
+        }
+        else if (creep.memory.working == false){
+            creep.getEnergy(false,true);
         }
     }
-};
-
-module.exports = roleHarvester;
+}

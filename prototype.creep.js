@@ -1,12 +1,15 @@
 var roles = {
     harvester: require('role.harvester'),
-    upgrader: require('role.upgrader'),
-    builder: require('role.builder'),
+    // upgrader: require('role.upgrader'),
+    // builder: require('role.builder'),
 }
     //Run role
 Creep.prototype.runRole =
     function () {
-    roles[this.memory.role].run(this);
+    for (let r in this.memory.role){
+        roles['harvester'].run(this);
+        // console.log(this.memory.role);
+    }
     };
 
 //creep get energy
@@ -32,10 +35,8 @@ Creep.prototype.getEnergy =
         // if no use container
         if (useContainer == false && userSource){
             // find source
-            let source = this.pos.findClosestByPath(FIND_SOURCES_ACTIVE){
-                if (this.harvest(source) == ERR_NOT_IN_RANGE){
-                    this.moveTo(source);
-                }
+            let source = this.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
+            if (this.harvest(source) == ERR_NOT_IN_RANGE){
+                this.moveTo(source);}
             }
-        }
-    }
+}
