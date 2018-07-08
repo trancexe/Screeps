@@ -1,15 +1,16 @@
 var roles = {
     harvester: require('role.harvester'),
+    haulier: require('role.haulier'),
     // upgrader: require('role.upgrader'),
     // builder: require('role.builder'),
 }
     //Run role
 Creep.prototype.runRole =
     function () {
-    for (let r in this.memory.role){
+    // for (let r in this.memory.role){
         roles['harvester'].run(this);
         // console.log(this.memory.role);
-    }
+    // }
     };
 
 //creep get energy
