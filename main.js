@@ -1,6 +1,6 @@
 require('prototype.spawn');
 require('prototype.creep')
-
+var report = require('function.report');
 
 module.exports.loop = function () {
 
@@ -39,4 +39,9 @@ module.exports.loop = function () {
         Game.spawns[spawnName].creepCheckForSpawn();
     }
 
+
+    //function report
+    if (Game.time % 20 === 0) {
+        report(Game.rooms);
+    }
 }

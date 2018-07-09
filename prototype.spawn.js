@@ -1,8 +1,10 @@
-var listOfRoles = ['harvester', 'haulier', 'builder' /**, 'claimer', 'upgrader', 'repairer', 'wallRepairer'*/];
+var listOfRoles = ['harvester', 'haulier', 'builder' , 'upgrader', 'repairer'];
 var bodyRole = {
      harvester  : [WORK, WORK, CARRY,CARRY, MOVE],
-     haulier    : [CARRY,CARRY,MOVE],
-     builder    : [WORK,WORK,CARRY,MOVE]
+     haulier    : [CARRY,CARRY,CARRY,MOVE],
+     builder    : [WORK,WORK,CARRY,MOVE],
+     upgrader   : [WORK,WORK,CARRY,MOVE],
+     repairer   : [WORK,WORK,CARRY,MOVE],
 };
 
 StructureSpawn.prototype.creepCheckForSpawn = 
@@ -26,24 +28,51 @@ StructureSpawn.prototype.creepCheckForSpawn =
         let name = undefined;
 
         //check if no harvester or lorry is left
-        if (numberOfCreeps['harvester'] == 0 && numberOfCreeps['haulier'] == 0 ){
+        if (numberOfCreeps['harvester'] == 0 || numberOfCreeps['haulier'] == 0 ){
         //        check energy left
-        //    If have enough energt to create harvester
-            if (this.energy >= costCreatCreep('harvester')){
-                // name = this.createCustomCreep(maxEnergy,'harvester')
+            if (numberOfCreeps['harvester'] == 0){
+                //    If have enough energt to create harvester
+                if (this.energy >= costCreatCreep('harvester')){
+                    name = this.createCustomCreep(maxEnergy,'harvester')
+                    // console.log(neme);
+                }
+                //if not enough energy left;
+                else if (this.energy < costCreatCreep('harvester')){
+                    name = this.createCustomCreep(room.energyAvailable,'harvester')
+                    // console.log(name);
+                }
             }
-            //if not enough energy left;
-            else if (this.energy < costCreatCreep('harvester')){
-                // name = this.createCustomCreep(room.energyAvailable,'haulier')
+            //if there ara no haulier left
+            if (numberOfCreeps['haulier'] == 0){
+                //    If have enough energt to create harvester
+                if (this.energy >= costCreatCreep('haulier')){
+                    name = this.createCustomCreep(maxEnergy,'haulier')
+                    // console.log(neme);
+                }
+                //if not enough energy left;
+                else if (this.energy < costCreatCreep('haulier')){
+                    name = this.createCustomCreep(room.energyAvailable,'haulier')
+                    // console.log(name);
+                }
             }
-
+            // console.log(name);
+        }
+        if (name == undefined){
+            // console.log(this.memory.minCreeps);
+            for (let mr in this.memory.minCreeps){
+                // console.log(numberOfCreeps[mr]);
+                if (numberOfCreeps[mr]<this.memory.minCreeps[mr] && maxEnergy==room.energyAvailable){
+                    name = this.createCustomCreep(maxEnergy,mr)
+                }
+                // console.log('jumlah creep: '+numberOfCreeps[mr]+' izin: '+this.memory.minCreeps[mr]+' Role:'+mr);
+            }
         }
 
         //add console log for spawn new creep
         if (name != undefined && _.isString(name)){
             console.log(this.name + " spawned new creep: " + name + " (" + Game.creeps[name].memory.role + ")");
         }
-        // console.log(this);
+        // console.log(name);
         // this.createCustomCreep(maxEnergy,'harvester');
 
     };
@@ -59,12 +88,17 @@ StructureSpawn.prototype.createCustomCreep =
         // console.log('approved :'+approvedPart+" produce part: "+(numberOfPart)+' max approved: '+ (50/producePart));
 
         let body = [];
+        //for every bodu part
         for (let nmb in bodyRole[roleName]){
-            body.push(bodyRole[roleName][nmb]);
+            // for every numberOfPart
+            for (let i = 0; i < numberOfPart; i++) {
+                body.push(bodyRole[roleName][nmb]);
+            }
         }
 
+
         // console.log(this);
-        return this.spawnCreep(body, undefined, { role: roleName, working: false });
+        return this.createCreep(body, undefined, { role: roleName, working: false });
 
 
     };
