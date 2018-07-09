@@ -1,5 +1,9 @@
-var listOfRoles = ['harvester', 'lorry', 'claimer', 'upgrader', 'repairer', 'builder', 'wallRepairer'];
-
+var listOfRoles = ['harvester', 'haulier', 'claimer', 'upgrader', 'repairer', 'builder', 'wallRepairer'];
+var bodyRole = {
+     harvester : [WORK, WORK, CARRY,CARRY, MOVE],
+     haulier : [CARRY,CARRY,MOVE],
+     builder : [WORK,WORK,CARRY,MOVE]
+};
 
 StructureSpawn.prototype.creepCheckForSpawn = 
     function () {
@@ -23,7 +27,31 @@ StructureSpawn.prototype.creepCheckForSpawn =
 
         //check if no harvester or lorry is left
         if (numberOfCreeps['harvester'] == 0 && numberOfCreeps['lorry'] == 0 ){
-
+                        
         }
 
     };
+createCustomCreep =
+    function (energyUse,roleName) {
+        for (let role of listOfRoles) {
+            console.log(costCreatCreep(role));
+        }
+
+
+
+    };
+
+costCreatCreep =
+    function (roleName) {
+        let cost=0;
+        let part;
+        //    break down body part
+        for (let nmb in bodyRole[roleName]){
+                part = bodyRole[roleName][nmb]
+                cost += BODYPART_COST[part]
+        }
+        return(cost);
+    };
+
+
+

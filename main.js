@@ -34,5 +34,9 @@ module.exports.loop = function () {
         Game.creeps[name].runRole();
     }
 
+    //try to spawn creep
+    for (let spawnName in Game.spawns ){
+        createCustomCreep(false,'harvester');
+    }
 
 }
