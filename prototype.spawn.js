@@ -1,10 +1,11 @@
-var listOfRoles = ['harvester', 'haulier', 'builder' , 'upgrader', 'repairer'];
+var listOfRoles = ['harvester', 'haulier', 'builder' , 'upgrader', 'repairer', 'wallRepairer'];
 var bodyRole = {
-     harvester  : [WORK, WORK, CARRY,CARRY, MOVE],
-     haulier    : [CARRY,CARRY,CARRY,MOVE],
-     builder    : [WORK,WORK,CARRY,MOVE],
-     upgrader   : [WORK,WORK,CARRY,MOVE],
-     repairer   : [WORK,WORK,CARRY,MOVE],
+     harvester      : [WORK, WORK, CARRY,CARRY, MOVE],
+     haulier        : [CARRY,CARRY,CARRY,MOVE],
+     builder        : [WORK,WORK,CARRY,MOVE],
+     upgrader       : [WORK,WORK,CARRY,MOVE],
+     repairer       : [WORK,WORK,CARRY,MOVE],
+     wallRepairer   : [WORK,WORK,CARRY,MOVE],
 };
 
 StructureSpawn.prototype.creepCheckForSpawn = 

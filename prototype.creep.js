@@ -4,6 +4,7 @@ var roles = {
     upgrader: require('role.upgrader'),
     builder: require('role.builder'),
     repairer: require('role.repairer'),
+    wallRepairer: require('role.wallRepairer')
 };
     //Run role
 Creep.prototype.runRole =
