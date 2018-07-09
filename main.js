@@ -36,7 +36,7 @@ module.exports.loop = function () {
 
     //try to spawn creep
     for (let spawnName in Game.spawns ){
-        createCustomCreep(false,'harvester');
+        Game.spawns[spawnName].creepCheckForSpawn();
     }
 
 }
