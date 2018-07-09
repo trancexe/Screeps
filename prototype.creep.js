@@ -3,7 +3,7 @@ var roles = {
     haulier: require('role.haulier'),
     upgrader: require('role.upgrader'),
     builder: require('role.builder'),
-    repairer: require('role.builder'),
+    repairer: require('role.repairer'),
 };
     //Run role
 Creep.prototype.runRole =
