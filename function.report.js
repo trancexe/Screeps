@@ -9,7 +9,7 @@ module.exports = function (rooms) {
         console.log('<span style="color:rgba(142, 68, 173,1.0);">##################################################</span>');
 
         console.log(rms.energyAvailable + ' Energy for spawning from ' + rms.energyCapacityAvailable + ' Total spawning capacity')
-        console.log('Total energy avaiable in storage : ');
+        // console.log('Total energy avaiable in storage : ');
         var numberOfHarvester = _.sum(Game.creeps, (c) => c.memory.role == 'harvester');
         var numberOfHaulier = _.sum(Game.creeps, (c) => c.memory.role == 'haulier');
         var numberOfUpgrader = _.sum(Game.creeps, (c) => c.memory.role == 'upgrader');

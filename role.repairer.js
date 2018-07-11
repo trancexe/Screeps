@@ -24,7 +24,8 @@ module.exports = {
                 // the second argument for findClosestByPath is an object which takes
                 // a property called filter which can be a function
                 // we use the arrow operator to define it
-                filter: (s) => s.hits < s.hitsMax && s.structureType != STRUCTURE_WALL
+                filter: (s) => (s.hits/s.hitsMax)*100 < 90
+                    // && s.structureType != STRUCTURE_WALL
             });
 
             // if we find one
@@ -32,7 +33,7 @@ module.exports = {
                 // try to repair it, if it is out of range
                 if (creep.repair(structure) == ERR_NOT_IN_RANGE) {
                     // move towards it
-                    creep.moveTo(structure);
+                    creep.moveTo(structure, {visualizePathStyle: {stroke: '#ffaa00'}});
                 }
             }
             // if we can't fine one
@@ -43,7 +44,7 @@ module.exports = {
         }
         // if creep is supposed to get energy
         else {
-            creep.getEnergy(true, true);
+            creep.getEnergy(true, false);
         }
     }
 };

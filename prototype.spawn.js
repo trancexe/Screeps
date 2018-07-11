@@ -1,11 +1,11 @@
 var listOfRoles = ['harvester', 'haulier', 'builder' , 'upgrader', 'repairer', 'wallRepairer'];
 var bodyRole = {
-     harvester      : [WORK, WORK, CARRY,CARRY, MOVE],
-     haulier        : [CARRY,CARRY,CARRY,MOVE],
-     builder        : [WORK,WORK,CARRY,MOVE],
-     upgrader       : [WORK,WORK,CARRY,MOVE],
-     repairer       : [WORK,WORK,CARRY,MOVE],
-     wallRepairer   : [WORK,WORK,CARRY,MOVE],
+     harvester      : [WORK,CARRY,CARRY,MOVE],
+     haulier        : [WORK,CARRY,CARRY,CARRY,MOVE],
+     builder        : [WORK,CARRY,CARRY,MOVE],
+     upgrader       : [WORK,CARRY,CARRY,MOVE],
+     repairer       : [WORK,CARRY,CARRY,MOVE],
+     wallRepairer   : [WORK,CARRY,CARRY,MOVE],
 };
 
 StructureSpawn.prototype.creepCheckForSpawn = 
@@ -16,15 +16,40 @@ StructureSpawn.prototype.creepCheckForSpawn =
         // find all creeps in room
         /** @type {Array.<Creep>} */
         let creepsInRoom = room.find(FIND_MY_CREEPS);
-
         // count the number of creeps alive for each role in this room
         // _.sum will count the number of properties in Game.creeps filtered by the
         //  arrow function, which checks for the creep being a specific role
         /** @type {Object.<string, number>} */
         let numberOfCreeps = {};
-        for (let role of listOfRoles) {
-            numberOfCreeps[role] = _.sum(creepsInRoom, (c) => c.memory.role == role);
+        //check minCreeps memory
+        for (let role of listOfRoles){
+            // if (this.memory.minCreeps){
+            //     console.log('minCreeps ada');
+            // }
+            // else if (this.memory.minCreeps) {
+            //     // this.memory.minCreeps= {harvester:1};
+            // }
+            if (this.memory.minCreeps[role]){
+                numberOfCreeps[role] = _.sum(creepsInRoom, (c) => c.memory.role == role);
+                // console.log(numberOfCreeps[role]);
+            }
+            else if (this.memory.minCreeps[role] == undefined){
+                let addMemory = this.memory.minCreeps[role] = 1;
+                console.log('Add memory on '+this+' minCreeps role '+role+' = 1');
+            }
         }
+        // if (this.memory.minCreeps){
+        //     for (let role of listOfRoles) {
+        //         numberOfCreeps[role] = _.sum(creepsInRoom, (c) => c.memory.role == role);
+        //         // console.log(numberOfCreeps[role]);
+        //     }
+        // }
+        // else {
+        //     for (let role of listOfRoles) {
+        //         let addMemory = this.memory.minCreeps[role]=1;
+        //     }
+        // }
+
         let maxEnergy = room.energyCapacityAvailable;
         let name = undefined;
 
@@ -58,7 +83,7 @@ StructureSpawn.prototype.creepCheckForSpawn =
             }
             // console.log(name);
         }
-        if (name == undefined){
+        else if (name == undefined){
             // console.log(this.memory.minCreeps);
             for (let mr in this.memory.minCreeps){
                 // console.log(numberOfCreeps[mr]);
@@ -75,7 +100,6 @@ StructureSpawn.prototype.creepCheckForSpawn =
         }
         // console.log(name);
         // this.createCustomCreep(maxEnergy,'harvester');
-
     };
 StructureSpawn.prototype.createCustomCreep =
     function (energyUse,roleName) {
@@ -90,17 +114,17 @@ StructureSpawn.prototype.createCustomCreep =
 
         let body = [];
         //for every bodu part
-        for (let nmb in bodyRole[roleName]){
+        for (let nmb of bodyRole[roleName]){
             // for every numberOfPart
             for (let i = 0; i < numberOfPart; i++) {
-                body.push(bodyRole[roleName][nmb]);
+                body.push(nmb);
             }
         }
 
 
         // console.log(this);
         return this.createCreep(body, undefined, { role: roleName, working: false });
-
+        // return console.log(nmb);
 
     };
 
@@ -109,8 +133,7 @@ costCreatCreep =
         let cost=0;
         let part;
         //    break down body part
-        for (let nmb in bodyRole[roleName]){
-                part = bodyRole[roleName][nmb]
+        for (let part of bodyRole[roleName]){
                 cost += BODYPART_COST[part]
         }
         return(cost);

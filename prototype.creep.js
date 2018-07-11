@@ -9,8 +9,10 @@ var roles = {
     //Run role
 Creep.prototype.runRole =
     function () {
-    roles[this.memory.role].run(this);
-    // console.log(this.memory.role);
+        roles[this.memory.role].run(this);
+        if (Game.time % 5 === 0) {
+            this.say(this.ticksToLive+' '+this.memory.role)
+        }
     };
 
 //creep get energy
@@ -30,13 +32,13 @@ Creep.prototype.getEnergy =
             if (container != undefined){
                 // try to withdraw
                 if (this.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE ){
-                    this.moveTo(container);
+                    this.moveTo(container, {visualizePathStyle: {stroke: '#FFFF00'}});
                 }
             }
             //try to harvest energy from source when no container
             else if (container == undefined){
                 if (this.harvest(source) == ERR_NOT_IN_RANGE){
-                    this.moveTo(source);
+                    this.moveTo(source, {visualizePathStyle: {stroke: '#FFFF00'}});
                 }
             }
         }
@@ -44,7 +46,21 @@ Creep.prototype.getEnergy =
         if (useContainer == false && userSource){
             // find source
             if (this.harvest(source) == ERR_NOT_IN_RANGE){
-                this.moveTo(source);
+                this.moveTo(source, {visualizePathStyle: {stroke: '#FFFF00'}});
             }
         }
 }
+
+Creep.prototype.buildRoad =
+    function () {
+        let roads = this.pos.findInRange(FIND_STRUCTURES, 0,{filter: (s)=>s.structureType==STRUCTURE_ROAD});
+        let creep = this;
+        // console.log(roads+'  '+creep);
+        // console.log(Game.creeps.Scarlett.pos.findInRange(FIND_STRUCTURES,0, {filter: (s)=>s.structureType==STRUCTURE_ROAD}) == 0)
+        _.forEach(Game.rooms, function (room) {
+            if (roads == 0){
+                let bRoad = room.createConstructionSite(creep.pos, STRUCTURE_ROAD);
+                // console.log(bRoad+'  '+creep)
+            }
+        })
+    }

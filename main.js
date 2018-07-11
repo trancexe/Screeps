@@ -1,5 +1,6 @@
 require('prototype.spawn');
-require('prototype.creep')
+require('prototype.creep');
+var TrxRoom = require('prototype.structure');
 var report = require('function.report');
 
 module.exports.loop = function () {
@@ -13,32 +14,22 @@ module.exports.loop = function () {
         }
     }
 
-    var tower = Game.getObjectById('TOWER_ID');
-    if(tower) {
-        var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-            filter: (structure) => structure.hits < structure.hitsMax
-        });
-        if(closestDamagedStructure) {
-            tower.repair(closestDamagedStructure);
-        }
-
-        var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-        if(closestHostile) {
-            tower.attack(closestHostile);
-        }
-    }
-
     // for each creeps
     for (let name in Game.creeps) {
         // run creep logic
         Game.creeps[name].runRole();
+        Game.creeps[name].buildRoad();
     }
 
-    //try to spawn creep
+    //for each spawn
     for (let spawnName in Game.spawns ){
         Game.spawns[spawnName].creepCheckForSpawn();
     }
 
+    //for each room
+    for (let rms in Game.rooms){
+        TrxRoom.tower(rms);
+    }
 
     //function report
     if (Game.time % 20 === 0) {

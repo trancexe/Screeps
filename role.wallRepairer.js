@@ -46,7 +46,7 @@ module.exports = {
                 // try to repair it, if not in range
                 if (creep.repair(target) == ERR_NOT_IN_RANGE) {
                     // move towards it
-                    creep.moveTo(target);
+                    creep.moveTo(target, {visualizePathStyle: {stroke: '#ffaa00'}});
                 }
             }
             // if we can't fine one
@@ -57,7 +57,7 @@ module.exports = {
         }
         // if creep is supposed to get energy
         else {
-            creep.getEnergy(true, true);
+            creep.getEnergy(true, false);
         }
     }
 };
