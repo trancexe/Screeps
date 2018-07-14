@@ -32,13 +32,13 @@ Creep.prototype.getEnergy =
             if (container != undefined){
                 // try to withdraw
                 if (this.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE ){
-                    this.moveTo(container, {visualizePathStyle: {stroke: '#FFFF00'}});
+                    this.moveTo(container, {visualizePathStyle: {stroke: '#ff0000'}});
                 }
             }
             //try to harvest energy from source when no container
             else if (container == undefined){
                 if (this.harvest(source) == ERR_NOT_IN_RANGE){
-                    this.moveTo(source, {visualizePathStyle: {stroke: '#FFFF00'}});
+                    this.moveTo(source, {visualizePathStyle: {stroke: '#ff0000'}});
                 }
             }
         }
@@ -46,7 +46,7 @@ Creep.prototype.getEnergy =
         if (useContainer == false && userSource){
             // find source
             if (this.harvest(source) == ERR_NOT_IN_RANGE){
-                this.moveTo(source, {visualizePathStyle: {stroke: '#FFFF00'}});
+                this.moveTo(source, {visualizePathStyle: {stroke: '#ff0000'}});
             }
         }
 }
